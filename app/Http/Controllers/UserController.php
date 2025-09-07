@@ -15,7 +15,7 @@ class UserController extends Controller
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'roles' => 'required|array|min:1',
-            'roles.*' => 'exists:roles,id',
+            'roles.*' => 'required|string|exists:roles,name',
         ]);
 
         $user = \App\Models\User::create([
@@ -23,7 +23,9 @@ class UserController extends Controller
             'email' => $validated['email'],
         ]);
 
-        $user->roles()->attach($validated['roles']);
+        // Find role IDs by names
+        $roleIds = \App\Models\Role::whereIn('name', $validated['roles'])->pluck('id')->toArray();
+        $user->roles()->attach($roleIds);
 
         return response()->json(['message' => 'User created successfully', 'user' => $user->load('roles')], 201);
     }
