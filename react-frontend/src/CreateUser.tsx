@@ -17,6 +17,13 @@ const CreateUser: React.FC = () => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+
+    // Frontend validation for empty fields
+    if (!fullName.trim() || !email.trim() || roles.length === 0) {
+      setError("All fields are required, including at least one role.");
+      return;
+    }
+
     setLoading(true);
     try {
       await axios.post("http://localhost:8000/api/users", {
@@ -35,7 +42,12 @@ const CreateUser: React.FC = () => {
     } catch (err: any) {
       setLoading(false);
       if (err.response?.data?.errors) {
-        setError(Object.values(err.response.data.errors).flat().join(' '));
+        // Laravel validation errors
+        if (err.response.data.errors.email?.includes('unique')) {
+          setError("This email address is already registered.");
+        } else {
+          setError(Object.values(err.response.data.errors).flat().join(' '));
+        }
       } else if (err.message === "Network Error") {
         setError("Network error: Unable to reach the server.");
       } else {
