@@ -57,31 +57,61 @@ const CreateUser: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '40px auto', padding: 24, border: '1px solid #eee', borderRadius: 8, background: '#fafafa' }}>
-      <h2 style={{ textAlign: 'center' }}>Create User</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', marginBottom: 4 }}>Full Name:</label>
-          <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} required style={{ width: '100%', padding: 8 }} />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 flex items-center justify-center">
+      <div className="max-w-md w-full mx-auto p-8 border border-gray-100 rounded-2xl bg-white shadow-2xl">
+        <div className="flex flex-col items-center mb-6">
+          <div className="w-16 h-16 mb-2 bg-blue-600 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">U</div>
+          <h2 className="text-3xl font-extrabold text-center text-gray-900 tracking-tight">Create User</h2>
+          <p className="text-gray-500 text-sm mt-1">Add a new user to your team</p>
         </div>
-        <div style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', marginBottom: 4 }}>Email:</label>
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: '100%', padding: 8 }} />
-        </div>
-        <div style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', marginBottom: 4 }}>Roles:</label>
-          <select multiple value={roles} onChange={e => setRoles(Array.from(e.target.selectedOptions, option => option.value))} required style={{ width: '100%', padding: 8, height: 100 }}>
-            {rolesList.map(role => (
-              <option key={role} value={role}>{role}</option>
-            ))}
-          </select>
-        </div>
-        <button type="submit" style={{ width: '100%', padding: 10, background: '#1976d2', color: '#fff', border: 'none', borderRadius: 4 }} disabled={loading}>
-          {loading ? 'Creating...' : 'Create'}
-        </button>
-        {success && <div style={{color: 'green', marginTop: 16}}>{success}</div>}
-        {error && <div style={{color: 'red', marginTop: 16}}>{error}</div>}
-      </form>
+  <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block mb-2 text-sm font-semibold text-gray-700">Full Name</label>
+            <input
+              type="text"
+              value={fullName}
+              onChange={e => setFullName(e.target.value)}
+              required
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 text-gray-900"
+              placeholder="Enter full name"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-semibold text-gray-700">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 text-gray-900"
+              placeholder="Enter email address"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-semibold text-gray-700">Roles</label>
+            <select
+              multiple
+              value={roles}
+              onChange={e => setRoles(Array.from(e.target.selectedOptions, option => option.value))}
+              required
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 text-gray-900 h-32"
+            >
+              {rolesList.map(role => (
+                <option key={role} value={role}>{role}</option>
+              ))}
+            </select>
+          </div>
+          <button
+            type="submit"
+            className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:from-blue-700 hover:to-indigo-700 transition duration-150"
+            disabled={loading}
+          >
+            {loading ? 'Creating...' : 'Create'}
+          </button>
+          {success && <div className="text-green-600 mt-4 text-center font-semibold">{success}</div>}
+          {error && <div className="text-red-600 mt-4 text-center font-semibold">{error}</div>}
+        </form>
+      </div>
     </div>
   );
 };
