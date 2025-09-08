@@ -9,45 +9,56 @@ const CreateUser: React.FC = () => {
   const [email, setEmail] = useState("");
   const [roles, setRoles] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
     try {
       await axios.post("http://localhost:8000/api/users", {
         full_name: fullName,
         email,
         roles,
       });
+      setLoading(false);
       navigate("/users");
     } catch (err: any) {
-      setError(err.response?.data?.message || "Error creating user");
+      setLoading(false);
+      if (err.response?.data?.errors) {
+        // Laravel validation errors
+        setError(Object.values(err.response.data.errors).flat().join(' '));
+      } else {
+        setError(err.response?.data?.message || "Error creating user");
+      }
     }
   };
 
   return (
-    <div>
-      <h2>Create User</h2>
+    <div style={{ maxWidth: 400, margin: '40px auto', padding: 24, border: '1px solid #eee', borderRadius: 8, background: '#fafafa' }}>
+      <h2 style={{ textAlign: 'center' }}>Create User</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Full Name:</label>
-          <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} required />
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', marginBottom: 4 }}>Full Name:</label>
+          <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} required style={{ width: '100%', padding: 8 }} />
         </div>
-        <div>
-          <label>Email:</label>
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', marginBottom: 4 }}>Email:</label>
+          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: '100%', padding: 8 }} />
         </div>
-        <div>
-          <label>Roles:</label>
-          <select multiple value={roles} onChange={e => setRoles(Array.from(e.target.selectedOptions, option => option.value))} required>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', marginBottom: 4 }}>Roles:</label>
+          <select multiple value={roles} onChange={e => setRoles(Array.from(e.target.selectedOptions, option => option.value))} required style={{ width: '100%', padding: 8, height: 100 }}>
             {rolesList.map(role => (
               <option key={role} value={role}>{role}</option>
             ))}
           </select>
         </div>
-        <button type="submit">Create</button>
-        {error && <div style={{color: 'red'}}>{error}</div>}
+        <button type="submit" style={{ width: '100%', padding: 10, background: '#1976d2', color: '#fff', border: 'none', borderRadius: 4 }} disabled={loading}>
+          {loading ? 'Creating...' : 'Create'}
+        </button>
+        {error && <div style={{color: 'red', marginTop: 16}}>{error}</div>}
       </form>
     </div>
   );
