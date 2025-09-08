@@ -1,43 +1,70 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# User Management App
 
-## About Laravel
+A full-stack application using Laravel 8 (API) and React 17 + TypeScript (frontend) to manage users and roles.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
+- Create users with full name, email, and multiple roles (Author, Editor, Subscriber, Administrator)
+- View users grouped by role
+- Validation for required fields and unique email
+- React frontend with hooks, axios, and react-router-dom
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Backend Setup (Laravel)
+1. **Clone the repository**
+2. **Install dependencies:**
+	```bash
+	composer install
+	```
+3. **Copy .env file:**
+	```bash
+	cp .env.example .env
+	```
+4. **Set your database credentials in `.env`:**
+	- `DB_DATABASE=your_db_name`
+	- `DB_USERNAME=your_db_user`
+	- `DB_PASSWORD=your_db_password`
+5. **Generate app key:**
+	```bash
+	php artisan key:generate
+	```
+6. **Run migrations and seed roles:**
+	```bash
+	php artisan migrate
+	php artisan db:seed --class=RolesTableSeeder
+	```
+7. **Start Laravel server:**
+	```bash
+	php artisan serve
+	```
+	The API will be available at `http://127.0.0.1:8000`.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Frontend Setup (React)
+1. **Navigate to frontend folder:**
+	```bash
+	cd react-frontend
+	```
+2. **Install dependencies:**
+	```bash
+	npm install
+	```
+3. **Start React app:**
+	```bash
+	npm start
+	```
+	The app will run at `http://localhost:3000`.
 
-## Learning Laravel
+## API Endpoints
+- `POST /api/users` — Create user
+- `GET /api/users` — List users grouped by role
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Notes
+- Make sure both servers (Laravel and React) are running for full functionality.
+- If you change backend port, update API URLs in React code.
+- For CORS issues, ensure Laravel's `cors` config allows requests from React's port.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
+**Enjoy building and testing!**
 - **[Cyber-Duck](https://cyber-duck.co.uk)**
 - **[Many](https://www.many.co.uk)**
 - **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
