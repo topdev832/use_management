@@ -9,12 +9,14 @@ const CreateUser: React.FC = () => {
   const [email, setEmail] = useState("");
   const [roles, setRoles] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
     setLoading(true);
     try {
       await axios.post("http://localhost:8000/api/users", {
@@ -23,12 +25,19 @@ const CreateUser: React.FC = () => {
         roles,
       });
       setLoading(false);
-      navigate("/users");
+      setSuccess("User created successfully!");
+      setFullName("");
+      setEmail("");
+      setRoles([]);
+      setTimeout(() => {
+        navigate("/users");
+      }, 1200);
     } catch (err: any) {
       setLoading(false);
       if (err.response?.data?.errors) {
-        // Laravel validation errors
         setError(Object.values(err.response.data.errors).flat().join(' '));
+      } else if (err.message === "Network Error") {
+        setError("Network error: Unable to reach the server.");
       } else {
         setError(err.response?.data?.message || "Error creating user");
       }
@@ -58,6 +67,7 @@ const CreateUser: React.FC = () => {
         <button type="submit" style={{ width: '100%', padding: 10, background: '#1976d2', color: '#fff', border: 'none', borderRadius: 4 }} disabled={loading}>
           {loading ? 'Creating...' : 'Create'}
         </button>
+        {success && <div style={{color: 'green', marginTop: 16}}>{success}</div>}
         {error && <div style={{color: 'red', marginTop: 16}}>{error}</div>}
       </form>
     </div>
