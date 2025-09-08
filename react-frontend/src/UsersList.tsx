@@ -20,28 +20,42 @@ const UsersList: React.FC = () => {
       });
   }, []);
 
+  // Group users by role name
+  const grouped: { [role: string]: User[] } = {};
+  users.forEach(user => {
+    user.roles.forEach(role => {
+      if (!grouped[role.name]) grouped[role.name] = [];
+      grouped[role.name].push(user);
+    });
+  });
+
   return (
     <div>
-      <h2>Users List</h2>
+      <h2>Users Grouped by Role</h2>
       {loading ? <div>Loading...</div> : (
-        <table border={1} cellPadding={8}>
-          <thead>
-            <tr>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Roles</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map(user => (
-              <tr key={user.id}>
-                <td>{user.full_name}</td>
-                <td>{user.email}</td>
-                <td>{user.roles.map(r => r.name).join(', ')}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        Object.keys(grouped).length === 0 ? <div>No users found.</div> : (
+          Object.keys(grouped).map(roleName => (
+            <div key={roleName} style={{ marginBottom: 32 }}>
+              <h3>{roleName}</h3>
+              <table border={1} cellPadding={8} style={{ width: '100%', marginBottom: 8 }}>
+                <thead>
+                  <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {grouped[roleName].map(user => (
+                    <tr key={user.id}>
+                      <td>{user.full_name}</td>
+                      <td>{user.email}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))
+        )
       )}
     </div>
   );
